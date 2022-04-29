@@ -12,6 +12,10 @@ class Propshaft::Asset
     File.binread(path)
   end
 
+  def modified_at
+    File.mtime(path)
+  end
+
   def content_type
     Mime::Type.lookup_by_extension(logical_path.extname.from(1))
   end
@@ -21,7 +25,14 @@ class Propshaft::Asset
   end
 
   def digest
-    @digest ||= Digest::SHA1.hexdigest("#{content}#{version}")
+    @digest ||= Digest::SHA1.hexdigest(digest_source)
+  end
+
+  def digest_source
+    source = [content]
+    source << modified_at.to_i if Rails.application.assets.resolver.tracks_modifications?
+    source << version
+    source.join
   end
 
   def digested_path

@@ -18,6 +18,10 @@ module Propshaft::Resolver
       end
     end
 
+    def tracks_modifications?
+      false
+    end
+
     private
       def parsed_manifest
         @parsed_manifest ||= JSON.parse(manifest_path.read, symbolize_names: false)

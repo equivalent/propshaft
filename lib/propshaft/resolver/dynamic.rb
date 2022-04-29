@@ -17,5 +17,9 @@ module Propshaft::Resolver
         asset.content
       end
     end
+
+    def tracks_modifications?
+      true
+    end
   end
 end
